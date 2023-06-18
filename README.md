@@ -1,5 +1,7 @@
 # Go web demo: Mini Wiki
 
+Based on the Go web tutorial: https://go.dev/doc/articles/wiki/
+
 ## Running locally
 
 In your console, run
