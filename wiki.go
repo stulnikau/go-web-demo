@@ -9,7 +9,9 @@ import (
 	"regexp"
 )
 
-var templates = template.Must(template.ParseFiles("edit.html", "view.html"))
+const PAGES_DIR = "pages/"
+
+var templates = template.Must(template.ParseGlob("templates/*"))
 var validPath = regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
 
 type Page struct {
@@ -18,12 +20,12 @@ type Page struct {
 }
 
 func (p *Page) save() error {
-	filename := p.Title + ".txt"
+	filename := PAGES_DIR + p.Title + ".txt"
 	return os.WriteFile(filename, p.Body, 0600)
 }
 
 func loadPage(title string) (*Page, error) {
-	filename := title + ".txt"
+	filename := PAGES_DIR + title + ".txt"
 	body, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
