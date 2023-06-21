@@ -91,6 +91,13 @@ func main() {
 	http.HandleFunc("/view/", makeHandler(viewHandler))
 	http.HandleFunc("/edit/", makeHandler(editHandler))
 	http.HandleFunc("/save/", makeHandler(saveHandler))
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/" {
+			http.Redirect(w, r, "/view/FrontPage", http.StatusFound)
+			return
+		}
+		http.NotFound(w, r)
+	})
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
