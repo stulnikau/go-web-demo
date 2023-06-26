@@ -13,6 +13,7 @@ const PAGES_DIR = "pages/"
 
 var templates = template.Must(template.ParseGlob("templates/*"))
 var validPath = regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
+var pageLinkPattern = regexp.MustCompile(`\[(.+)\]`)
 
 type Page struct {
 	Title string
@@ -30,6 +31,13 @@ func loadPage(title string) (*Page, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// Add page links
+	body = pageLinkPattern.ReplaceAllFunc(body, func(data []byte) []byte {
+		pageTitle := pageLinkPattern.ReplaceAllString(string(data), `$1`)
+		return []byte("<a href='/view/" + pageTitle + "'>" + pageTitle + "</a>")
+	})
+
 	return &Page{Title: title, Body: body}, nil
 }
 
