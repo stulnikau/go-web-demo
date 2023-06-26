@@ -42,7 +42,10 @@ func loadPage(title string) (*Page, error) {
 }
 
 func renderTemplate(w http.ResponseWriter, templateName string, p *Page) {
-	err := templates.ExecuteTemplate(w, templateName+".html", p)
+	err := templates.ExecuteTemplate(w, templateName+".html", map[string]interface{}{
+		"Title": p.Title,
+		"Body":  template.HTML(p.Body),
+	})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
